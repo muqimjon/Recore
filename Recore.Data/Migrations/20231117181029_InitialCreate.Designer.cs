@@ -12,8 +12,8 @@ using Recore.Data.Contexts;
 namespace Recore.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230822190303_AddedPasswordPropertyForUser")]
-    partial class AddedPasswordPropertyForUser
+    [Migration("20231117181029_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -173,6 +173,291 @@ namespace Recore.Data.Migrations
                     b.ToTable("Regions");
                 });
 
+            modelBuilder.Entity("Recore.Domain.Entities.Attachments.Attachment", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Attachments");
+                });
+
+            modelBuilder.Entity("Recore.Domain.Entities.Bonuses.Bonus", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric");
+
+                    b.Property<long>("BonusSettingId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<long>("OrderId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BonusSettingId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Bonuses");
+                });
+
+            modelBuilder.Entity("Recore.Domain.Entities.Bonuses.BonusSetting", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal>("From")
+                        .HasColumnType("numeric");
+
+                    b.Property<bool>("IsDate")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsWeekDay")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("OrderQuantity")
+                        .HasColumnType("integer");
+
+                    b.Property<long?>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("PromoCode")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal?>("To")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Weekday")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BonusSettings");
+                });
+
+            modelBuilder.Entity("Recore.Domain.Entities.Carts.Cart", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Cart");
+                });
+
+            modelBuilder.Entity("Recore.Domain.Entities.Carts.CartItem", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("CartId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<double>("Quantity")
+                        .HasColumnType("double precision");
+
+                    b.Property<decimal>("Summ")
+                        .HasColumnType("numeric");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("CartItem");
+                });
+
+            modelBuilder.Entity("Recore.Domain.Entities.Inventories.Inventory", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("double precision");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("Quantity")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Inventories");
+                });
+
+            modelBuilder.Entity("Recore.Domain.Entities.Inventories.InventoryLog", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("OperationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("OrderId")
+                        .HasColumnType("bigint");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("double precision");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("Quantity")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("WareHouseId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("WareHouseId");
+
+                    b.ToTable("InventoryLogs");
+                });
+
             modelBuilder.Entity("Recore.Domain.Entities.Orders.Order", b =>
                 {
                     b.Property<long>("Id")
@@ -238,6 +523,9 @@ namespace Recore.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<long>("CartItemId")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -263,6 +551,8 @@ namespace Recore.Data.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CartItemId");
 
                     b.HasIndex("OrderId");
 
@@ -307,6 +597,9 @@ namespace Recore.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<long?>("AttachmentId")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("CategoryId")
                         .HasColumnType("bigint");
 
@@ -316,91 +609,28 @@ namespace Recore.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
+                    b.Property<int>("Discount")
+                        .HasColumnType("integer");
+
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsTop")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
-
-                    b.Property<double>("Quantity")
-                        .HasColumnType("double precision");
-
-                    b.Property<int>("Unit")
-                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AttachmentId");
+
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            CategoryId = 1L,
-                            CreatedAt = new DateTime(2023, 8, 22, 19, 3, 3, 77, DateTimeKind.Utc).AddTicks(1982),
-                            Description = "",
-                            IsDeleted = false,
-                            Name = "Cheeseburger",
-                            Price = 24000m,
-                            Quantity = 10.0,
-                            Unit = 4
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            CategoryId = 8L,
-                            CreatedAt = new DateTime(2023, 8, 22, 19, 3, 3, 77, DateTimeKind.Utc).AddTicks(1984),
-                            Description = "",
-                            IsDeleted = false,
-                            Name = "Coffee",
-                            Price = 7000m,
-                            Quantity = 10.0,
-                            Unit = 4
-                        },
-                        new
-                        {
-                            Id = 3L,
-                            CategoryId = 9L,
-                            CreatedAt = new DateTime(2023, 8, 22, 19, 3, 3, 77, DateTimeKind.Utc).AddTicks(1985),
-                            Description = "",
-                            IsDeleted = false,
-                            Name = "Moxito",
-                            Price = 15000m,
-                            Quantity = 10.0,
-                            Unit = 4
-                        },
-                        new
-                        {
-                            Id = 4L,
-                            CategoryId = 10L,
-                            CreatedAt = new DateTime(2023, 8, 22, 19, 3, 3, 77, DateTimeKind.Utc).AddTicks(1988),
-                            Description = "",
-                            IsDeleted = false,
-                            Name = "Ketchup",
-                            Price = 3000m,
-                            Quantity = 10.0,
-                            Unit = 4
-                        },
-                        new
-                        {
-                            Id = 5L,
-                            CategoryId = 5L,
-                            CreatedAt = new DateTime(2023, 8, 22, 19, 3, 3, 77, DateTimeKind.Utc).AddTicks(1990),
-                            Description = "",
-                            IsDeleted = false,
-                            Name = "Caesar",
-                            Price = 23000m,
-                            Quantity = 10.0,
-                            Unit = 4
-                        });
                 });
 
             modelBuilder.Entity("Recore.Domain.Entities.Products.ProductCategory", b =>
@@ -431,70 +661,70 @@ namespace Recore.Data.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2023, 8, 22, 19, 3, 3, 77, DateTimeKind.Utc).AddTicks(1715),
+                            CreatedAt = new DateTime(2023, 11, 17, 18, 10, 29, 124, DateTimeKind.Utc).AddTicks(4504),
                             IsDeleted = false,
                             Name = "Burgers"
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2023, 8, 22, 19, 3, 3, 77, DateTimeKind.Utc).AddTicks(1717),
+                            CreatedAt = new DateTime(2023, 11, 17, 18, 10, 29, 124, DateTimeKind.Utc).AddTicks(4506),
                             IsDeleted = false,
                             Name = "Lavashes"
                         },
                         new
                         {
                             Id = 3L,
-                            CreatedAt = new DateTime(2023, 8, 22, 19, 3, 3, 77, DateTimeKind.Utc).AddTicks(1718),
+                            CreatedAt = new DateTime(2023, 11, 17, 18, 10, 29, 124, DateTimeKind.Utc).AddTicks(4506),
                             IsDeleted = false,
                             Name = "Hot-Dogs"
                         },
                         new
                         {
                             Id = 4L,
-                            CreatedAt = new DateTime(2023, 8, 22, 19, 3, 3, 77, DateTimeKind.Utc).AddTicks(1719),
+                            CreatedAt = new DateTime(2023, 11, 17, 18, 10, 29, 124, DateTimeKind.Utc).AddTicks(4545),
                             IsDeleted = false,
                             Name = "Sendviches"
                         },
                         new
                         {
                             Id = 5L,
-                            CreatedAt = new DateTime(2023, 8, 22, 19, 3, 3, 77, DateTimeKind.Utc).AddTicks(1720),
+                            CreatedAt = new DateTime(2023, 11, 17, 18, 10, 29, 124, DateTimeKind.Utc).AddTicks(4546),
                             IsDeleted = false,
                             Name = "Salats"
                         },
                         new
                         {
                             Id = 6L,
-                            CreatedAt = new DateTime(2023, 8, 22, 19, 3, 3, 77, DateTimeKind.Utc).AddTicks(1721),
+                            CreatedAt = new DateTime(2023, 11, 17, 18, 10, 29, 124, DateTimeKind.Utc).AddTicks(4547),
                             IsDeleted = false,
                             Name = "Snacks"
                         },
                         new
                         {
                             Id = 7L,
-                            CreatedAt = new DateTime(2023, 8, 22, 19, 3, 3, 77, DateTimeKind.Utc).AddTicks(1721),
+                            CreatedAt = new DateTime(2023, 11, 17, 18, 10, 29, 124, DateTimeKind.Utc).AddTicks(4548),
                             IsDeleted = false,
                             Name = "Pizzas"
                         },
                         new
                         {
                             Id = 8L,
-                            CreatedAt = new DateTime(2023, 8, 22, 19, 3, 3, 77, DateTimeKind.Utc).AddTicks(1722),
+                            CreatedAt = new DateTime(2023, 11, 17, 18, 10, 29, 124, DateTimeKind.Utc).AddTicks(4549),
                             IsDeleted = false,
                             Name = "Hot drinks"
                         },
                         new
                         {
                             Id = 9L,
-                            CreatedAt = new DateTime(2023, 8, 22, 19, 3, 3, 77, DateTimeKind.Utc).AddTicks(1726),
+                            CreatedAt = new DateTime(2023, 11, 17, 18, 10, 29, 124, DateTimeKind.Utc).AddTicks(4549),
                             IsDeleted = false,
                             Name = "Cold drinks"
                         },
                         new
                         {
                             Id = 10L,
-                            CreatedAt = new DateTime(2023, 8, 22, 19, 3, 3, 77, DateTimeKind.Utc).AddTicks(1728),
+                            CreatedAt = new DateTime(2023, 11, 17, 18, 10, 29, 124, DateTimeKind.Utc).AddTicks(4550),
                             IsDeleted = false,
                             Name = "Sauces"
                         });
@@ -507,6 +737,9 @@ namespace Recore.Data.Migrations
                         .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("AttachmentId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -534,6 +767,8 @@ namespace Recore.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AttachmentId");
+
                     b.HasIndex("VehicleId");
 
                     b.ToTable("Suppliers");
@@ -546,6 +781,9 @@ namespace Recore.Data.Migrations
                         .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long?>("AttachmentId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Brand")
                         .HasColumnType("text");
@@ -569,6 +807,8 @@ namespace Recore.Data.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AttachmentId");
 
                     b.ToTable("Vehicles");
                 });
@@ -617,6 +857,31 @@ namespace Recore.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Recore.Domain.Entities.WareHouses.WareHouse", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WareHouse");
                 });
 
             modelBuilder.Entity("Recore.Domain.Entities.Addresses.Address", b =>
@@ -668,6 +933,99 @@ namespace Recore.Data.Migrations
                     b.Navigation("Country");
                 });
 
+            modelBuilder.Entity("Recore.Domain.Entities.Bonuses.Bonus", b =>
+                {
+                    b.HasOne("Recore.Domain.Entities.Bonuses.BonusSetting", "BonusSetting")
+                        .WithMany()
+                        .HasForeignKey("BonusSettingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Recore.Domain.Entities.Orders.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Recore.Domain.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BonusSetting");
+
+                    b.Navigation("Order");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Recore.Domain.Entities.Carts.Cart", b =>
+                {
+                    b.HasOne("Recore.Domain.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Recore.Domain.Entities.Carts.CartItem", b =>
+                {
+                    b.HasOne("Recore.Domain.Entities.Carts.Cart", "Cart")
+                        .WithMany()
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Recore.Domain.Entities.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Recore.Domain.Entities.Inventories.Inventory", b =>
+                {
+                    b.HasOne("Recore.Domain.Entities.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Recore.Domain.Entities.Inventories.InventoryLog", b =>
+                {
+                    b.HasOne("Recore.Domain.Entities.Orders.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Recore.Domain.Entities.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Recore.Domain.Entities.WareHouses.WareHouse", "WareHouse")
+                        .WithMany()
+                        .HasForeignKey("WareHouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("WareHouse");
+                });
+
             modelBuilder.Entity("Recore.Domain.Entities.Orders.Order", b =>
                 {
                     b.HasOne("Recore.Domain.Entities.Addresses.Address", "Address")
@@ -705,6 +1063,12 @@ namespace Recore.Data.Migrations
 
             modelBuilder.Entity("Recore.Domain.Entities.Orders.OrderItem", b =>
                 {
+                    b.HasOne("Recore.Domain.Entities.Carts.CartItem", "CartItem")
+                        .WithMany()
+                        .HasForeignKey("CartItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Recore.Domain.Entities.Orders.Order", "Order")
                         .WithMany()
                         .HasForeignKey("OrderId")
@@ -717,6 +1081,8 @@ namespace Recore.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("CartItem");
+
                     b.Navigation("Order");
 
                     b.Navigation("Product");
@@ -724,24 +1090,47 @@ namespace Recore.Data.Migrations
 
             modelBuilder.Entity("Recore.Domain.Entities.Products.Product", b =>
                 {
+                    b.HasOne("Recore.Domain.Entities.Attachments.Attachment", "Attachment")
+                        .WithMany()
+                        .HasForeignKey("AttachmentId");
+
                     b.HasOne("Recore.Domain.Entities.Products.ProductCategory", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Attachment");
+
                     b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Recore.Domain.Entities.Suppliers.Supplier", b =>
                 {
+                    b.HasOne("Recore.Domain.Entities.Attachments.Attachment", "Attachment")
+                        .WithMany()
+                        .HasForeignKey("AttachmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Recore.Domain.Entities.Suppliers.Vehicle", "Vehicle")
                         .WithMany()
                         .HasForeignKey("VehicleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Attachment");
+
                     b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("Recore.Domain.Entities.Suppliers.Vehicle", b =>
+                {
+                    b.HasOne("Recore.Domain.Entities.Attachments.Attachment", "Attachment")
+                        .WithMany()
+                        .HasForeignKey("AttachmentId");
+
+                    b.Navigation("Attachment");
                 });
 
             modelBuilder.Entity("Recore.Domain.Entities.Products.ProductCategory", b =>

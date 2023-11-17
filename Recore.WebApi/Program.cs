@@ -44,6 +44,8 @@ builder.Logging.AddSerilog(logger);
 
 var app = builder.Build();
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 PathHelper.WebRootPath = Path.GetFullPath("wwwroot");
 
 PathHelper.CountryPath = Path.GetFullPath(builder.Configuration.GetValue<string>(("FilePath:CountryFilePaths")));
