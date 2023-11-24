@@ -9,56 +9,95 @@ namespace Recore.Service.Extensions;
 
 public static class CollectionExtension
 {
-	public static IQueryable<T> ToPaginate<T>(this IQueryable<T> values, PaginationParams @params)
-	{
-		var source = values.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize);
-		return source;
-	}
+    /*	public static IQueryable<T> ToPaginate<T>(this IQueryable<T> values, PaginationParams @params)
+            => values.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize);
 
-    public static IEnumerable<TEntity> ToPagedList<TEntity>(this IQueryable<TEntity> entities, PaginationParams @params)
+        public static IEnumerable<TEntity> ToPagedList<TEntity>(this IQueryable<TEntity> entities, PaginationParams @params)
+            where TEntity : Auditable
+        {
+            if (@params.PageSize == 0 && @params.PageIndex == 0)
+                @params = new PaginationParams()
+                {
+                    PageSize = 10,
+                    PageIndex = 1
+                };
+
+            var metaData = new PaginationMetaData(entities.Count(), @params);
+
+            var json = JsonConvert.SerializeObject(metaData);
+
+            if (HttpContextHelper.ResponseHeaders != null)
+            {
+                if (HttpContextHelper.ResponseHeaders.ContainsKey("X-Pagination"))
+                    HttpContextHelper.ResponseHeaders.Remove("X-Pagination");
+
+                HttpContextHelper.ResponseHeaders.Add("X-Pagination", json);
+            }
+
+            return @params.PageIndex > 0 && @params.PageSize > 0 ?
+                entities.OrderBy(e => e.Id)
+                    .Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize) :
+                        throw new CustomException(400, "Please, enter valid numbers");
+        }
+
+        public static IQueryable<TEntity> OrderBy<TEntity>(this IQueryable<TEntity> collect, Filter filter)
+        {
+            var prop = filter.OrderBy ?? "Id";
+
+            var property = typeof(TEntity).GetProperties().FirstOrDefault(n
+                => n.Name.Equals(prop, StringComparison.OrdinalIgnoreCase))
+                ?? throw new CustomException(400, "Property that does not exist");
+
+            if (property.Name is "Id" && !filter.IsDesc)
+                return collect;
+
+            if (filter.IsDesc)
+                return collect.OrderByDescending(x => property.GetValue(x));
+
+            return collect.OrderBy(x => property.GetValue(x));
+        }*/
+
+    public static IQueryable<T> ToPaginate<T>(this IQueryable<T> values, PaginationParams @params)
+        => values.Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize);
+
+    public static IQueryable<TEntity> ToPagedList<TEntity>(this IQueryable<TEntity> entities, PaginationParams @params)
         where TEntity : Auditable
     {
-        if (@params.PageSize == 0 && @params.PageIndex == 0)
-        {
-            @params = new PaginationParams()
-            {
-                PageSize = 10,
-                PageIndex = 1
-            };
-        }
+        if (@params.PageSize <= 0)
+            @params.PageSize = 10;
+
+        if (@params.PageIndex <= 0)
+            @params.PageIndex = 1;
+
         var metaData = new PaginationMetaData(entities.Count(), @params);
 
         var json = JsonConvert.SerializeObject(metaData);
 
         if (HttpContextHelper.ResponseHeaders != null)
-        {
             if (HttpContextHelper.ResponseHeaders.ContainsKey("X-Pagination"))
                 HttpContextHelper.ResponseHeaders.Remove("X-Pagination");
+        HttpContextHelper.ResponseHeaders.Add("X-Pagination", json);
 
-            HttpContextHelper.ResponseHeaders.Add("X-Pagination", json);
-        }
-
-        return @params.PageIndex > 0 && @params.PageSize > 0 ?
-            entities.OrderBy(e => e.Id)
-                .Skip((@params.PageIndex - 1) * @params.PageSize).Take(@params.PageSize) :
-                    throw new CustomException(400, "Please, enter valid numbers");
+        return entities.ToPaginate(@params);
     }
 
-    public static IQueryable<TEntity> OrderBy<TEntity>(this IQueryable<TEntity> collect, Filter filter)
+    public static IQueryable<TEntity> OrderBy<TEntity>(this IQueryable<TEntity> collect, Filter filter) where TEntity : Auditable
     {
-        if(filter is null)
-            return collect;
+        var prop = filter.OrderBy ?? "Id";
 
-        var property = typeof(TEntity).GetProperties().FirstOrDefault(n 
-            => n.Name.ToLower().Equals(filter.OrderBy.ToLower())
-            );
-
-        if(property is null)
-            return collect;
+        var property = typeof(TEntity).GetProperties().FirstOrDefault(n
+            => n.Name.Equals(prop, StringComparison.OrdinalIgnoreCase))
+            ?? throw new CustomException(400, "Property that does not exist");
 
         if (filter.IsDesc)
-            return collect.OrderByDescending(x => property);
+        {
+            if (prop == "Id")
+                return collect.OrderByDescending(x => x.Id);
+            return collect.OrderByDescending(x => property.GetValue(x));
+        }
 
-        return collect.OrderBy(x => property);
+        if (prop == "Id")
+            return collect.OrderBy(x => x.Id);
+        return collect.OrderBy(x => property.GetValue(x));
     }
 }

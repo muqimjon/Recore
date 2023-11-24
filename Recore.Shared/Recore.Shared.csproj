@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Recore.Service\Recore.Service.csproj" />
+  </ItemGroup>
+
 </Project>
