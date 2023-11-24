@@ -5,6 +5,7 @@ using Recore.WebApi.Extensions;
 using Recore.WebApi.Middlewares;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Recore.Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddHttpContextAccessor();
 
 // Add DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -43,6 +46,8 @@ builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
 
 var app = builder.Build();
+
+HttpContextExtensions.InitAccessor(app);
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
