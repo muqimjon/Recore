@@ -37,7 +37,7 @@ public static class CollectionExtension
     }
 
 
-    public static IEnumerable<TEntity> OrderBy<TEntity>(this IEnumerable<TEntity> collect, Filter filter)
+    public static IEnumerable<TEntity> OrderBy<TEntity>(this IEnumerable<TEntity> collect, Filter filter) where TEntity : Auditable
     {
         var prop = filter.OrderBy ?? "Id";
 
