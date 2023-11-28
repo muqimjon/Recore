@@ -68,10 +68,10 @@ public class WareHouseService : IWareHouseService
 
 	public async ValueTask<IEnumerable<WareHouseResultDto>> RetrieveAllAsync(PaginationParams @params, Filter filter, string search = null)
 	{
-		var WareHouses = await this.repository.SelectAll()
+		var WareHouses = (await this.repository.SelectAll()
 			.ToPaginate(@params)
-			.OrderBy(filter)
-			.ToListAsync();
+			.ToListAsync())
+			.OrderBy(filter);
 
 		var result = WareHouses.Where(WareHouse => WareHouse.Name.Contains(search, StringComparison.OrdinalIgnoreCase));
 		var mappedWareHouses = this.mapper.Map<List<WareHouseResultDto>>(result);
